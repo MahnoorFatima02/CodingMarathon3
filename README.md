@@ -1,17 +1,8 @@
 # Coding Marathon 3
 
-- **Group 6:**
-- **Link to the backend repositories:**
-  - [Backend repo for API V1]
-  - [Backend repo for API V2]
-- **Link to the frontend repository:**
-  - [Frontend repo]
-- **URLs for the deployed APIs:**
+## Group 6
 
-  - [URL for API V1]
-  - [URL for API V2]
-
-  ***
+---
 
 # Usage
 
@@ -148,7 +139,7 @@ npm run dev
   - Handles new user registration
   - Includes profile picture uploads and form validation
 
-## Conclusion
+## Front-end Conclusion
 
 The frontend code demonstrates excellent React practices and modern development principles. It features a well-structured component hierarchy, efficient state management using hooks and context, and robust routing implementation. The code showcases strong form handling, seamless API integration, and secure authentication methods. File handling capabilities, responsive design considerations, and comprehensive error management are evident. The codebase is well-organized with clear naming conventions and logical grouping. The implementation of AuthContext highlights a solid understanding of centralized state management. Overall, the frontend architecture reflects a high level of expertise in React development, ensuring maintainability, reusability, and a smooth user experience.
 
