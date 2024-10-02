@@ -1,6 +1,7 @@
 import useField from "../hooks/useField";
 import useSignup from "../hooks/useSignup";
 import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
 
 const Signup = ({ setIsAuthenticated }) => {
   const navigate = useNavigate();
@@ -15,23 +16,47 @@ const Signup = ({ setIsAuthenticated }) => {
   const profilePicture = useField("file");
 
   const { signup, error } = useSignup("/api/users/signup");
+  const [profilePictureUrl, setProfilePictureUrl] = useState("");
+  const [selectedFileName, setSelectedFileName] = useState("");
+
+  const handleFileUpload = async (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setSelectedFileName(file.name);
+      console.log("File selected:", file.name);
+    }
+    // const file = profilePicture.value;
+    console.log(file);
+    // const fileName = `${Date.now()}`;
+    // const filePath = `../../public/images/${fileName}`;
+
+    // Save file to public folder
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const response = await fetch("/api/users/upload", {
+      method: "POST",
+      body: formData,
+    });
+
+    const filePath = await response.json();
+
+    setProfilePictureUrl(filePath["filePath"]);
+  };
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    const formData = new FormData();
-    formData.append("name", name.value);
-    formData.append("username", username.value);
-    formData.append("password", password.value);
-    formData.append("phone_number", phoneNumber.value);
-    formData.append("gender", gender.value);
-    formData.append("date_of_birth", dateOfBirth.value);
-    formData.append("membership_status", membershipStatus.value);
-    formData.append("address", address.value);
-    if (profilePicture.value) {
-      formData.append("profile_picture", profilePicture.value);
-    }
-
-    await signup(formData);
+    await signup({
+      name: name.value,
+      username: username.value,
+      password: password.value,
+      phone_number: phoneNumber.value,
+      gender: gender.value,
+      date_of_birth: dateOfBirth.value,
+      membership_status: membershipStatus.value,
+      address: address.value,
+      profile_picture: profilePictureUrl,
+    });
     if (!error) {
       console.log("success");
       setIsAuthenticated(true);
@@ -60,7 +85,32 @@ const Signup = ({ setIsAuthenticated }) => {
         <label>Address:</label>
         <input {...address} />
         <label>Profile Picture:</label>
-        <input {...profilePicture} />
+        <input
+          {...profilePicture}
+          onChange={handleFileUpload}
+          accept="image/*"
+          style={{ display: "none" }}
+          id="profile-picture-input"
+        />
+        <label
+          htmlFor="profile-picture-input"
+          className="custom-file-upload"
+          style={{
+            display: "inline-block",
+            padding: "6px 12px",
+            cursor: "pointer",
+            backgroundColor: "#4CAF50",
+            color: "white",
+            border: "none",
+            borderRadius: "4px",
+            fontSize: "16px",
+            transition: "background-color 0.3s ease",
+          }}
+        >
+          {selectedFileName || "Choose file"}
+        </label>
+        <br />
+        <br />
         <button>Sign up</button>
       </form>
     </div>

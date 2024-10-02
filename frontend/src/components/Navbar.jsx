@@ -14,9 +14,19 @@ const Navbar = ({ isAuthenticated, setIsAuthenticated }) => {
       </Link>
       <div className="links">
         {isAuthenticated && (
-          <div>
+          <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
             <Link to="/jobs/add-job">Add Job</Link>
-            <span>{JSON.parse(localStorage.getItem("user")).email}</span>
+            <img
+              src={JSON.parse(localStorage.getItem("user")).profile_picture}
+              alt="Profile"
+              style={{
+                width: "30px",
+                height: "30px",
+                borderRadius: "50%",
+                objectFit: "cover",
+              }}
+            />
+            <span>Hello {JSON.parse(localStorage.getItem("user")).name}</span>
             <button onClick={handleClick}>Log out</button>
           </div>
         )}
