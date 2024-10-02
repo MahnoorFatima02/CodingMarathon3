@@ -1,10 +1,12 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect } from "react";
 
 export const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [token, setToken] = useState(null);
+  const [name, setName] = useState(null);
+  const [profilePictureUrl, setProfilePictureUrl] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -14,23 +16,34 @@ export function AuthProvider({ children }) {
       if (user.token) {
         setIsLoggedIn(true);
         setToken(user.token);
+        setName(user.name);
+        setProfilePictureUrl(user.profile_picture);
       }
     }
     setIsLoading(false);
   }, []);
 
-  function login(token) {
+  function authLogin(userData) {
     setIsLoggedIn(true);
-    setToken(token);
-    localStorage.setItem(
-      "user",
-      JSON.stringify({ email: "trung@email.com", token })
-    );
+    setToken(userData.token);
+    setName(userData.name);
+    setProfilePictureUrl(userData.profile_picture);
+    localStorage.setItem("user", JSON.stringify(userData));
+  }
+
+  function authSignup(userData) {
+    setIsLoggedIn(true);
+    setToken(userData.token);
+    setName(userData.name);
+    setProfilePictureUrl(userData.profile_picture);
+    localStorage.setItem("user", JSON.stringify(userData));
   }
 
   function logout() {
     setIsLoggedIn(false);
     setToken(null);
+    setName(null);
+    setProfilePictureUrl(null);
     localStorage.removeItem("user");
   }
 
@@ -38,7 +51,10 @@ export function AuthProvider({ children }) {
     isLoggedIn,
     isLoading,
     token,
-    login,
+    name,
+    profilePictureUrl,
+    authLogin,
+    authSignup,
     logout,
   };
 

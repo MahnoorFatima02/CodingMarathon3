@@ -1,10 +1,17 @@
 import { Link } from "react-router-dom";
-
-const Navbar = ({ isAuthenticated, setIsAuthenticated }) => {
+import { AuthContext } from "../Context/AuthContext";
+import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
+const Navbar = () => {
+  const navigate = useNavigate();
+  // const Navbar = ({ isAuthenticated, setIsAuthenticated }) => {
+  const { name, profilePictureUrl, logout, isLoggedIn } =
+    useContext(AuthContext);
   const handleClick = (e) => {
     e.preventDefault();
-    setIsAuthenticated(false);
-    localStorage.removeItem("user");
+    // setIsAuthenticated(false);
+    logout();
+    navigate("/");
   };
 
   return (
@@ -13,11 +20,20 @@ const Navbar = ({ isAuthenticated, setIsAuthenticated }) => {
         <h1>React Jobs</h1>
       </Link>
       <div className="links">
-        {isAuthenticated && (
+        {isLoggedIn && (
           <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
             <Link to="/jobs/add-job">Add Job</Link>
             <img
-              src={JSON.parse(localStorage.getItem("user")).profile_picture}
+              // src={
+              //   JSON.parse(localStorage.getItem("user")).profile_picture === ""
+              //     ? "/images/defaultavatar.jpg"
+              //     : JSON.parse(localStorage.getItem("user")).profile_picture
+              // }
+              src={
+                profilePictureUrl === ""
+                  ? "/images/defaultavatar.jpg"
+                  : profilePictureUrl
+              }
               alt="Profile"
               style={{
                 width: "30px",
@@ -26,11 +42,12 @@ const Navbar = ({ isAuthenticated, setIsAuthenticated }) => {
                 objectFit: "cover",
               }}
             />
-            <span>Hello {JSON.parse(localStorage.getItem("user")).name}</span>
+            {/* <span>Hello {JSON.parse(localStorage.getItem("user")).name}</span> */}
+            <span>Hello {name}</span>
             <button onClick={handleClick}>Log out</button>
           </div>
         )}
-        {!isAuthenticated && (
+        {!isLoggedIn && (
           <div>
             <Link to="/login">Login</Link>
             <Link to="/signup">Signup</Link>

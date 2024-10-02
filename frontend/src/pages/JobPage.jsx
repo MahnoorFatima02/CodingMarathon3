@@ -1,7 +1,11 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { AuthContext } from "../Context/AuthContext";
+import { useContext } from "react";
 
-const JobPage = ({ isAuthenticated }) => {
+const JobPage = () => {
+  const { isLoggedIn } = useContext(AuthContext);
+  // const JobPage = ({ isAuthenticated }) => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [job, setJob] = useState(null);
@@ -77,7 +81,7 @@ const JobPage = ({ isAuthenticated }) => {
           <p>Status: {job.status}</p>
           <p>Posted Date: {new Date(job.postedDate).toLocaleDateString()}</p>
 
-          {isAuthenticated && (
+          {isLoggedIn && (
             <>
               <button onClick={() => onDeleteClick(job._id)}>Delete</button>
               <button onClick={() => navigate(`/edit-job/${job._id}`)}>

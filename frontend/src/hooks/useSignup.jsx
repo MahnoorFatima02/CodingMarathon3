@@ -57,8 +57,9 @@ export default function useSignup(url) {
       return error;
     }
 
-    localStorage.setItem("user", JSON.stringify(user));
+    // localStorage.setItem("user", JSON.stringify(user));
     setIsLoading(false);
+    return user;
   };
 
   return { signup, isLoading, error };

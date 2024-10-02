@@ -1,10 +1,14 @@
+import { useContext } from "react";
+import { AuthContext } from "../Context/AuthContext";
 import useField from "../hooks/useField";
 import useSignup from "../hooks/useSignup";
 import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 
-const Signup = ({ setIsAuthenticated }) => {
+const Signup = () => {
+  // const Signup = ({ setIsAuthenticated }) => {
   const navigate = useNavigate();
+  const { authSignup } = useContext(AuthContext);
   const name = useField("text");
   const username = useField("text");
   const password = useField("password");
@@ -46,7 +50,7 @@ const Signup = ({ setIsAuthenticated }) => {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    await signup({
+    const userData = await signup({
       name: name.value,
       username: username.value,
       password: password.value,
@@ -57,9 +61,10 @@ const Signup = ({ setIsAuthenticated }) => {
       address: address.value,
       profile_picture: profilePictureUrl,
     });
-    if (!error) {
+    if (userData) {
+      authSignup(userData);
       console.log("success");
-      setIsAuthenticated(true);
+      // setIsAuthenticated(true);
       navigate("/");
     }
   };
