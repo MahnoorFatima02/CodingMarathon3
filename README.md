@@ -19,6 +19,7 @@ This project is a robust job management system with user authentication. It prov
 - Supertest - Testing library for HTTP assertions<br>
 - Jest - JavaScript testing framework<br>
 - dotenv - For managing environment variables<br>
+- MongoDB Atlas - For deloying database on AWS Cloud variables<br>
 
 # Usage
 
