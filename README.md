@@ -59,6 +59,16 @@ cd backend-protected
 npm install
 npm run dev
 ```
+Create a .env file in the root of your project and add the following environment variables:
+```sh
+PORT=4000
+MONGO_URI=`mongodb+srv://<db_username>:<db_password>@cluster0.zvk7d.mongodb.net/<database_name>?retryWrites=true&w=majority`
+SECRET=your_secret_key
+NODE_ENV=development
+TEST_MONGO_URI=`mongodb+srv://<db_username>:<db_password>@cluster0.zvk7d.mongodb.net/<test_database_name>?retryWrites=true&w=majority`
+```
+
+Replace <db_username>, <db_password>, <database_name>, and <test_database_name> with your actual MongoDB Atlas credentials and database names.
 
 ### Part 3
 
