@@ -57,14 +57,14 @@ describe("Job Routes", () => {
     it("should return an error with invalid job data", async () => {
       const invalidJobData = {
         title: "",
-        type: "Invalid",
-        description: "",
+        type: "",
+        description: "invalid",
         company: {
-          name: "",
+          name: "invalid",
           contactEmail: "invalid",
           contactPhone: "123",
         },
-        location: "",
+        location: "invalid",
         salary: -1,
       };
 
@@ -79,6 +79,11 @@ describe("Job Routes", () => {
   });
 
   describe("GET /api/jobs/", () => {
+    beforeAll(async () => {
+      // Clear the database before running the tests
+      await Job.deleteMany({});
+    });
+
     it("should fetch all jobs", async () => {
       // Arrange
       const jobData1 = {
@@ -125,6 +130,7 @@ describe("Job Routes", () => {
     });
   });
 
+  // Test suite for GET /api/jobs/:jobId
   describe("GET /api/jobs/:jobId", () => {
     it("should fetch a job by ID", async () => {
       // Arrange
@@ -166,6 +172,7 @@ describe("Job Routes", () => {
     });
   });
 
+  // Test suite for PUT /api/jobs/:jobId
   describe("PUT /api/jobs/:jobId", () => {
     it("should update an existing job", async () => {
       // Arrange
@@ -226,6 +233,33 @@ describe("Job Routes", () => {
         salary: 100000,
       };
 
+      const result = await api
+        .put("/api/jobs/123456789012345678901234")
+        .set("Authorization", `Bearer ${authToken}`)
+        .send(updatedJobData);
+
+      expect(result.status).toBe(404);
+      expect(result.body).toHaveProperty("error");
+    });
+  });
+
+  // Test suite for DELETE /api/jobs/:jobId
+  describe("DELETE /api/jobs/:jobId", () => {
+    it("should delete a job by ID", async () => {
+      // Arrange
+      const jobData = {
+        title: "Software Engineer",
+        type: "Full-time",
+        description: "Seeking a talented software engineer",
+        company: {
+          name: "Acme Inc.",
+          contactEmail: "hiring@acme.com",
+          contactPhone: "123-456-7890",
+        },
+        location: "San Francisco, CA",
+        salary: 100000,
+      };
+
       const createdJob = await api
         .post("/api/jobs")
         .set("Authorization", `Bearer ${authToken}`)
@@ -233,16 +267,15 @@ describe("Job Routes", () => {
 
       // Act
       const result = await api
-        .delete(`/api/jobs/${createdJob.body.id}`)
+        .delete(`/api/jobs/${createdJob.body.id}`) // Ensure the correct property
         .set("Authorization", `Bearer ${authToken}`);
 
       // Assert
       expect(result.status).toBe(204);
     });
-
     it("should return an error for a non-existent job ID", async () => {
       const result = await api
-        .delete("/api/jobs/123456789012345678901234")
+        .delete("/api/jobs/6789012345678901234")
         .set("Authorization", `Bearer ${authToken}`);
 
       expect(result.status).toBe(404);
