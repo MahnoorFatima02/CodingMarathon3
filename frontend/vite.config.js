@@ -6,7 +6,7 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   server: {
-    url: 'https://codingmarathon3-frontend.onrender.com',
+    port: 3000,
     proxy: {
       '/api': {
 //        target: 'http://localhost:4000',
