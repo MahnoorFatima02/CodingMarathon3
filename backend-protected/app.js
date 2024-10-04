@@ -25,9 +25,9 @@ app.use(errorHandler);
 module.exports = app;
 
 // Conditionally start the server
-if (process.env.NODE_ENV !== 'test') {
-  const PORT = process.env.PORT || 5000; // Use the PORT environment variable or default to 4000
-  app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-  });
-}
+//if (process.env.NODE_ENV !== 'test') {
+//  const PORT = process.env.PORT || 5000; // Use the PORT environment variable or default to 4000
+//  app.listen(PORT, () => {
+//    console.log(`Server running on port ${PORT}`);
+//  });
+//}
