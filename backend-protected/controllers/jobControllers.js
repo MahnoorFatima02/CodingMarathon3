@@ -3,9 +3,8 @@ const Job = require("../models/jobModel");
 
 // Get all jobs
 const getAllJobs = async (req, res) => {
-
   try {
-    const jobs = await Job.find({ }).sort({ createdAt: -1 });
+    const jobs = await Job.find({}).sort({ createdAt: -1 });
     res.status(200).json(jobs);
   } catch (error) {
     console.error("Error fetching jobs:", error);
@@ -15,7 +14,6 @@ const getAllJobs = async (req, res) => {
 
 // Create a new job
 const createJob = async (req, res) => {
-
   try {
     const user_id = req.user._id;
     const newJob = new Job({
@@ -25,6 +23,9 @@ const createJob = async (req, res) => {
     await newJob.save();
     res.status(201).json(newJob);
   } catch (error) {
+    if (error.name === "ValidationError") {
+      return res.status(400).json({ error: error.message });
+    }
     console.error("Error creating job:", error);
     res.status(500).json({ error: "Server Error" });
   }
@@ -41,7 +42,7 @@ const getJobById = async (req, res) => {
     const job = await Job.findById(jobId);
     if (!job) {
       console.log("Job not found");
-      return res.status(404).json({ message: "Job not found" });
+      return res.status(404).json({ error: "Job not found" }); // Changed from message to error
     }
     res.status(200).json(job);
   } catch (error) {
@@ -58,14 +59,13 @@ const updateJob = async (req, res) => {
   }
 
   try {
-    // const user_id = req.user._id;
     const job = await Job.findOneAndUpdate(
       { _id: jobId },
       { ...req.body },
       { new: true }
     );
     if (!job) {
-      return res.status(404).json({ message: "Job not found" });
+      return res.status(404).json({ error: "Job not found" }); // Changed from message to error
     }
     res.status(200).json(job);
   } catch (error) {

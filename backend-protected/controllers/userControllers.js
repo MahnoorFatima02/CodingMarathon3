@@ -22,7 +22,7 @@ const signupUser = async (req, res) => {
     date_of_birth,
     membership_status,
     address,
-    profile_picture,
+    
   } = req.body;
   try {
     if (
@@ -62,7 +62,7 @@ const signupUser = async (req, res) => {
       date_of_birth,
       membership_status,
       address,
-      profile_picture,
+      
     });
 
     if (user) {
