@@ -37,8 +37,6 @@ describe("User Routes", () => {
       // Act
       const result = await api.post("/api/users/signup").send(userData);
 
-      
-
       // Assert
       expect(result.status).toBe(201);
       expect(result.body).toHaveProperty("token");

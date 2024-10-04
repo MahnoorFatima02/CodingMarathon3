@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { useState } from "react";
+import { AuthContext } from "./Context/AuthContext";
+import { useContext } from "react";
 
 // pages & components
 import Navbar from "./components/Navbar";
@@ -12,56 +13,69 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 
 const App = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    return user && user.token ? true : false;
-  });
+  const { isLoggedIn } = useContext(AuthContext);
+  // const [isAuthenticated, setIsAuthenticated] = useState(() => {
+  //   const user = JSON.parse(localStorage.getItem("user"));
+  //   return user && user.token ? true : false;
+  // });
 
   return (
     <div className="App">
       <BrowserRouter>
         <Navbar
-          isAuthenticated={isAuthenticated}
-          setIsAuthenticated={setIsAuthenticated}
+        // isAuthenticated={isAuthenticated}
+        // setIsAuthenticated={setIsAuthenticated}
         />
         <div className="content">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route
               path="/jobs/:id"
-              element={<JobPage isAuthenticated={isAuthenticated} />}
+              element={<JobPage />}
+              // element={<JobPage isAuthenticated={isAuthenticated} />}
             />
             <Route
               path="/jobs/add-job"
-              element={
-                isAuthenticated ? <AddJobPage /> : <Navigate to="/signup" />
-              }
+              element={isLoggedIn ? <AddJobPage /> : <Navigate to="/signup" />}
+              // element={
+              //   isAuthenticated ? <AddJobPage /> : <Navigate to="/signup" />
+              // }
             />
             <Route
               path="/edit-job/:id"
-              element={
-                isAuthenticated ? <EditJobPage /> : <Navigate to="/signup" />
-              }
+              element={isLoggedIn ? <EditJobPage /> : <Navigate to="/signup" />}
+              // element={
+              //   isAuthenticated ? <EditJobPage /> : <Navigate to="/signup" />
+              // }
             />
             <Route
               path="/signup"
-              element={
-                isAuthenticated ? (
-                  <Navigate to="/" />
-                ) : (
-                  <Signup setIsAuthenticated={setIsAuthenticated} />
-                )
-              }
+              element={isLoggedIn ? <Navigate to="/" /> : <Signup />}
+              // element={
+              //   isAuthenticated ? (
+              //     <Navigate to="/" />
+              //   ) : (
+              //     <Signup setIsAuthenticated={setIsAuthenticated} />
+              //   )
+              // }
             />
             <Route
               path="/login"
               element={
-                isAuthenticated ? (
+                isLoggedIn ? (
                   <Navigate to="/" />
                 ) : (
-                  <Login setIsAuthenticated={setIsAuthenticated} />
+                  <Login />
+                  // <Login setIsAuthenticated={setIsAuthenticated} />
                 )
               }
+              // element={
+              //   isAuthenticated ? (
+              //     <Navigate to="/" />
+              //   ) : (
+              //     <Login setIsAuthenticated={setIsAuthenticated} />
+              //   )
+              // }
             />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>

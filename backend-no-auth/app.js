@@ -20,6 +20,11 @@ app.use(errorHandler);
 
 module.exports = app;
 
-app.listen(process.env.PORT, () => {
-  console.log(`Server running on port ${process.env.PORT}`)
-})  
+
+// Conditionally start the server
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(process.env.PORT, () => {
+    console.log(`Server running on port ${process.env.PORT}`);
+  });
+}
+

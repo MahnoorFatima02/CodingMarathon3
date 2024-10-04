@@ -14,7 +14,7 @@ const Home = () => {
           throw new Error("could not fetch the data for that resource");
         }
         const data = await res.json();
-        console.log(data);
+        // console.log(data);
         setIsPending(false);
         setJobs(data);
         setError(null);
