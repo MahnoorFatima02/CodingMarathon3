@@ -33,7 +33,9 @@ const signupUser = async (req, res) => {
       !gender ||
       !date_of_birth ||
       !membership_status ||
-      !address 
+      !address
+      // ||
+      // !profile_picture
     ) {
       res.status(400);
       throw new Error("Please add all fields");
@@ -66,7 +68,7 @@ const signupUser = async (req, res) => {
     if (user) {
       // console.log(user._id);
       const token = generateToken(user._id);
-      res.status(201).json({ username, token });
+      res.status(201).json({ name, profile_picture, username, token });
     } else {
       res.status(400);
       throw new Error("Invalid user data");
@@ -84,10 +86,17 @@ const loginUser = async (req, res) => {
   try {
     // Check for username
     const user = await User.findOne({ username });
+    const name1 = await User.findOne({ username }, "name");
+    const profile_picture1 = await User.findOne(
+      { username },
+      "profile_picture"
+    );
+    const name = name1.name;
+    const profile_picture = profile_picture1.profile_picture;
 
     if (user && (await bcrypt.compare(password, user.password))) {
       const token = generateToken(user._id);
-      res.status(200).json({ username, token });
+      res.status(200).json({ name, profile_picture, username, token });
     } else {
       res.status(400);
       throw new Error("Invalid credentials");
